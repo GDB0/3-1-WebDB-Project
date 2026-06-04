@@ -1,0 +1,12 @@
+<table class="table table-bordered border-primary table-hover" style="text-align:center;">
+  <thead class="table-primary"><th>loginid</th><th>고객명</th><th>상품id</th><th>상품명</th><th>일자</th><th colspan="2"></th></thead>
+  <% if(carts.length === 0) { %>
+    <tr><td colspan="7">자료가 없으니 고객이 장바구니에 상품을 담아야 합니다.</td></tr>
+  <% } else { %>
+    <% carts.forEach(function(c){ %>
+      <tr><td><%= c.loginid %></td><td><%= c.person_name %></td><td><%= c.prod_id %></td><td><%= c.product_name %></td><td><%= c.date %></td>
+      <td><a href="/purchase/cart/update/<%= c.cart_id %>">수정</a></td>
+      <td><a href="/purchase/cart/delete/<%= c.cart_id %>" onclick="if(confirm('정말로 삭제하시겠습니까?')==false) return false">삭제</a></td></tr>
+    <% }) %>
+  <% } %>
+</table>

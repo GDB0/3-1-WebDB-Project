@@ -1,0 +1,35 @@
+<script>
+function setAction(kind){
+  var checked = $('input[name="check"]:checked').length;
+  if(checked === 0){ alert(kind === 'pay' ? '구매할 상품을 선택해 주세요' : '삭제할 상품을 선택해 주세요'); return false; }
+  var f = document.getElementById('cartForm');
+  if(kind === 'pay') f.action = '/purchase/cartpurchase_process';
+  else {
+    if(confirm('정말로 삭제하시겠습니까?') === false) return false;
+    f.action = '/purchase/cartdelete_process';
+  }
+  return true;
+}
+</script>
+<form id="cartForm" method="post">
+<table class="table table-bordered">
+  <tr><th>구매선택</th><th>상품</th><th>상품명</th><th>단가</th><th>담은날</th><th>수량</th></tr>
+  <% if(carts.length === 0) { %>
+    <tr><td colspan="6" style="text-align:center;">장바구니에 담긴 상품이 없습니다.</td></tr>
+  <% } else { %>
+    <% carts.forEach(function(c){ %>
+      <tr style="text-align:center;vertical-align:middle;">
+        <td><input type="checkbox" name="check" value="<%= c.cart_id %>"></td>
+        <td><% if(c.image){ %><img src="/images/<%= c.image %>" style="width:100px;height:100px;"><% } %></td>
+        <td><%= c.product_name %></td><td><%= Number(c.price||0).toLocaleString() %> 원</td><td><%= c.date %></td>
+        <td><input type="number" name="qty[<%= c.cart_id %>]" value="<%= c.qty || 1 %>" min="1" style="width:100px;"></td>
+      </tr>
+    <% }) %>
+  <% } %>
+</table>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+  <button class="btn btn-outline-primary btn-sm" type="submit" onclick="return setAction('pay')">결재</button>
+  <button class="btn btn-outline-primary btn-sm" type="submit" onclick="return setAction('delete')">삭제</button>
+  <a href="/"><button class="btn btn-outline-primary btn-sm" type="button">상품 목록 돌아가기</button></a>
+</div>
+</form>

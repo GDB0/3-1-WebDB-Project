@@ -1,0 +1,18 @@
+<table class="table table-bordered">
+  <form method="post">
+    <input type="hidden" name="prod_id" value="<%= product.prod_id %>">
+    <tr>
+      <td rowspan="5" style="width:330px;text-align:center;">
+        <% if(product.image) { %><img src="/images/<%= product.image %>" style="width:300px;height:300px;"><% } else { %>이미지 없음<% } %>
+      </td>
+      <td><%= product.name %></td>
+    </tr>
+    <tr><td>가격 : <%= Number(product.price || 0).toLocaleString() %> 원</td></tr>
+    <tr><td>브랜드 : <%= product.brand %></td></tr>
+    <tr><td>수량 : <input type="number" name="qty" value="1" min="1" style="width:100px;"></td></tr>
+    <tr><td>
+      <button class="btn btn-outline-primary btn-sm" formaction="/purchase/purchase_process" type="submit">결재</button>
+      <button class="btn btn-outline-primary btn-sm" formaction="/purchase/cart_process" type="submit">장바구니</button>
+    </td></tr>
+  </form>
+</table>

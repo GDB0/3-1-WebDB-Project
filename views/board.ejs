@@ -1,0 +1,52 @@
+<h2><%- btname && btname[0] ? btname[0].title : '게시판' %></h2>
+
+<table class="table table-bordered border-primary table-hover" style="text-align:center;">
+  <thead class="table-primary">
+    <tr>
+      <th>작성자</th>
+      <th>제목</th>
+      <th>날짜</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if(!boards || boards.length === 0) { %>
+      <tr>
+        <td colspan="3">등록된 게시글이 없습니다.</td>
+      </tr>
+    <% } else { %>
+      <% boards.forEach(function(b){ %>
+        <tr>
+          <td><%= b.name || b.loginid %></td>
+          <td style="text-align:left;">
+            <% if(Number(b.p_id) !== 0) { %>&nbsp;&nbsp;&nbsp;↳ <% } %>
+            <a href="/board/detail/<%= b.board_id %>/<%= pNum %>" style="text-decoration:none;">
+              <%- b.title %>
+            </a>
+          </td>
+          <td><%= b.date %></td>
+        </tr>
+      <% }) %>
+    <% } %>
+  </tbody>
+</table>
+
+<div style="text-align:center; margin-bottom:15px;">
+  <% var j = 1; %>
+  <% while(j <= totalPages) { %>
+    <% if(j == pNum) { %>
+      <span style="font-weight:bold;"><%= j %></span>&nbsp;&nbsp;
+    <% } else { %>
+      <span><a href="/board/view/<%= btname[0].type_id %>/<%= j %>"><%= j %></a></span>&nbsp;&nbsp;
+    <% } %>
+    <% j++; %>
+  <% } %>
+</div>
+
+<% var canWrite = cls === 'MNG' || (cls === 'CST' && btname[0].write_YN === 'Y'); %>
+<% if(canWrite) { %>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="/board/create/<%= btname[0].type_id %>">
+      <button type="button" class="btn btn-info me-md-2">글쓰기</button>
+    </a>
+  </div>
+<% } %>

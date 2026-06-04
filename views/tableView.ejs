@@ -1,0 +1,37 @@
+<div class="container">
+  <h2><%= tableName %> 자료 목록</h2>
+
+  <% const viewColumns = columns.filter(function(col) { return col.COLUMN_KEY !== 'PRI'; }); %>
+
+  <table class="table table-bordered border-primary table-hover" style="text-align:center;">
+    <thead class="table-primary">
+      <tr>
+        <% viewColumns.forEach(function(col) { %>
+          <th><%= col.COLUMN_COMMENT && col.COLUMN_COMMENT !== '' ? col.COLUMN_COMMENT : col.COLUMN_NAME %></th>
+        <% }) %>
+        <th>생성</th>
+        <th>수정</th>
+        <th>삭제</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if(!rows || rows.length === 0) { %>
+        <tr>
+          <td colspan="<%= viewColumns.length + 3 %>">자료가 없습니다.</td>
+        </tr>
+      <% } else { %>
+        <% rows.forEach(function(row) { %>
+          <tr>
+            <% viewColumns.forEach(function(col) { %>
+              <td><%= row[col.COLUMN_NAME] %></td>
+            <% }) %>
+            <td><a href="#">생성</a></td>
+            <td><a href="#">수정</a></td>
+            <td><a href="#">삭제</a></td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>

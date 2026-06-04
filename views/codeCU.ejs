@@ -1,0 +1,50 @@
+<div class="container">
+  <h2>코드 <%= mode === 'create' ? '입력' : '수정' %></h2>
+  <form action="<%= mode === 'create' ? '/code/create_process' : '/code/update_process' %>" method="post">
+
+    <% if(mode === 'update'){ %>
+      <input type="hidden" name="old_main_id" value="<%= code.main_id %>">
+      <input type="hidden" name="old_sub_id" value="<%= code.sub_id %>">
+      <input type="hidden" name="old_start" value="<%= code.start %>">
+    <% } %>
+
+    <div class="mb-3">
+      <label class="form-label">대분류</label>
+      <input class="form-control" type="text" name="main_id" value="<%= code.main_id || '' %>" style="width:300px;">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">대분류명</label>
+      <input class="form-control" type="text" name="main_name" value="<%= code.main_name || '' %>" style="width:300px;">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">소분류</label>
+      <input class="form-control" type="text" name="sub_id" value="<%= code.sub_id || '' %>" style="width:300px;">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">소분류명</label>
+      <input class="form-control" type="text" name="sub_name" value="<%= code.sub_name || '' %>" style="width:300px;">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">시작일</label>
+      <!-- ✅ 여기만 readonly 제거 -->
+      <input class="form-control" type="text" name="start" value="<%= code.start || '' %>" style="width:300px;">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">종료일</label>
+      <input class="form-control" type="text" name="end" value="<%= code.end || '' %>" style="width:300px;">
+    </div>
+
+    <button class="btn btn-outline-primary btn-sm" type="submit">
+      <%= mode === 'create' ? '입력' : '수정' %>
+    </button>
+
+    <a href="/code/view">
+      <button class="btn btn-outline-primary btn-sm" type="button">코드 목록 돌아가기</button>
+    </a>
+  </form>
+</div>

@@ -1,0 +1,15 @@
+<table class="table table-bordered">
+  <tr style="text-align:center;vertical-align:middle;"><th>상품</th><th>상품명</th><th>단가</th><th>구매량</th><th>총금액</th><th>구매일</th><th>취소여부</th></tr>
+  <% if(purchases.length === 0) { %>
+    <tr><td colspan="7" style="text-align:center;">구매한 상품이 없습니다.</td></tr>
+  <% } else { %>
+    <% purchases.forEach(function(p){ %>
+      <tr style="text-align:center;vertical-align:middle;">
+        <td><% if(p.image){ %><img src="/images/<%= p.image %>" style="width:100px;height:100px;"><% } %></td>
+        <td><%= p.product_name %></td><td><%= Number(p.price||0).toLocaleString() %> 원</td><td><%= p.qty %></td>
+        <td><%= Number(p.total||0).toLocaleString() %> 원</td><td><%= p.date %></td>
+        <td><% if(p.cancel === 'Y') { %>취소된 상품<% } else { %><a href="/purchase/cancel/<%= p.purchase_id %>">구매취소</a><% } %></td>
+      </tr>
+    <% }) %>
+  <% } %>
+</table>

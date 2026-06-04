@@ -1,0 +1,22 @@
+<div class="container">
+<h2>구매 내역 수정</h2>
+<form action="/purchase/update_process" method="post">
+  <input type="hidden" name="purchase_id" value="<%= purchase.purchase_id %>">
+  <div class="mb-3"><label class="form-label">고객</label><select name="loginid">
+    <% persons.forEach(function(p){ %><option value="<%= p.loginid %>" <%= purchase.loginid===p.loginid?'selected':'' %>><%= p.name %></option><% }) %>
+  </select></div>
+  <div class="mb-3"><label class="form-label">상품</label><select name="prod_id">
+    <% products.forEach(function(p){ %><option value="<%= p.prod_id %>" <%= Number(purchase.prod_id)===Number(p.prod_id)?'selected':'' %>><%= p.name %></option><% }) %>
+  </select></div>
+  <table><tr><td><div class="mb-3"><label class="form-label">날짜</label><input class="form-control" type="text" name="date" value="<%= purchase.date %>" readonly style="width:300px;background-color:rgb(204,203,203);"></div></td><td>
+  <div class="mb-3"><label class="form-label">가격</label><input class="form-control" type="text" name="price" value="<%= purchase.price %>" style="width:300px;"></div></td></tr><tr><td>
+  <div class="mb-3"><label class="form-label">포인트</label><input class="form-control" type="text" name="point" value="<%= purchase.point %>" style="width:300px;"></div></td><td>
+  <div class="mb-3"><label class="form-label">수량</label><input class="form-control" type="number" name="qty" value="<%= purchase.qty %>" style="width:300px;"></div></td></tr></table>
+  <div class="mb-3"><label class="form-label">총액</label><input class="form-control" type="text" name="total" value="<%= purchase.total %>" style="width:300px;"></div>
+  <div class="mb-3"><label class="form-label">결제여부</label><select name="payYN"><option value="Y" <%= purchase.payYN==='Y'?'selected':'' %>>YES</option><option value="N" <%= purchase.payYN==='N'?'selected':'' %>>NO</option></select></div>
+  <div class="mb-3"><label class="form-label">취소여부</label><select name="cancel"><option value="Y" <%= purchase.cancel==='Y'?'selected':'' %>>YES</option><option value="N" <%= purchase.cancel==='N'?'selected':'' %>>NO</option></select></div>
+  <div class="mb-3"><label class="form-label">환불여부</label><select name="refund"><option value="Y" <%= purchase.refund==='Y'?'selected':'' %>>YES</option><option value="N" <%= (purchase.refund||'N')==='N'?'selected':'' %>>NO</option></select></div>
+  <button class="btn btn-outline-primary btn-sm" type="submit">수정</button>
+  <a href="/purchase/view"><button class="btn btn-outline-primary btn-sm" type="button">구매 목록 돌아가기</button></a>
+</form>
+</div>

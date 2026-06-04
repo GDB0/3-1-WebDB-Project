@@ -1,0 +1,48 @@
+<div class="container">
+  <script>
+    function displayFileName(){
+      var fileName = $('#file').val().split('\\').pop();
+      $('.upload-name').val(fileName);
+    }
+  </script>
+  <h2>상품 <%= mode === 'create' ? '입력' : '수정' %></h2>
+  <form action="<%= mode === 'create' ? '/product/create_process' : '/product/update_process' %>" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+    <input type="hidden" name="prod_id" value="<%= product.prod_id || '' %>">
+    <input type="hidden" name="oldImage" value="<%= product.image || '' %>">
+
+    <div class="mb-3">
+      <label class="form-label" for="id_main">카테고리</label>
+      <select name="category" id="id_main" class="form-select" style="width:300px;">
+        <% codes.forEach(function(c){ %>
+          <% var selected = (product.main_id === c.main_id && product.sub_id === c.sub_id) ? 'selected' : ''; %>
+          <option value="<%= c.main_id %>:<%= c.sub_id %>" <%= selected %>><%= c.main_name %> : <%= c.sub_name %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <table>
+      <tr>
+        <td><div class="mb-3"><label class="form-label">제품명</label><input class="form-control" type="text" name="name" value="<%= product.name || '' %>" style="width:300px;"></div></td>
+        <td width="30px"></td>
+        <td><div class="mb-3"><label class="form-label">가격</label><input class="form-control" type="text" name="price" value="<%= product.price || '' %>" style="width:300px;"></div></td>
+      </tr>
+      <tr>
+        <td><div class="mb-3"><label class="form-label">재고</label><input class="form-control" type="text" name="stock" value="<%= product.stock || '' %>" style="width:300px;"></div></td>
+        <td width="30px"></td>
+        <td><div class="mb-3"><label class="form-label">브랜드</label><input class="form-control" type="text" name="brand" value="<%= product.brand || '' %>" style="width:300px;"></div></td>
+      </tr>
+      <tr>
+        <td><div class="mb-3"><label class="form-label">공급자</label><input class="form-control" type="text" name="supplier" value="<%= product.supplier || '' %>" style="width:300px;"></div></td>
+        <td width="30px"></td><td></td>
+      </tr>
+    </table>
+
+    <div class="mb-3">
+      <input class="upload-name" value="<%= product.image || '' %>" name="image" placeholder="이미지파일" readonly>
+      <input type="file" id="file" name="uploadFile" onchange="displayFileName()">
+      <% if(mode === 'update') { %><span style="font-size:12px;">새 파일 선택 안 하면 기존 이미지 유지</span><% } %>
+    </div>
+    <button class="btn btn-outline-primary btn-sm" type="submit"><%= mode === 'create' ? '입력' : '수정' %></button>
+    <a href="/product/view"><button class="btn btn-outline-primary btn-sm" type="button">제품 목록 돌아가기</button></a>
+  </form>
+</div>

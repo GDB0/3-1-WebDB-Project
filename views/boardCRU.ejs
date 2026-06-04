@@ -1,0 +1,127 @@
+<div class="container">
+  <% var titleText = mode === 'create' ? '작성' : (mode === 'update' ? '수정' : (mode === 'reply' ? '답변' : '상세보기')); %>
+  <h2><%= titleText %></h2>
+
+  <% if(mode === 'detail') { %>
+    <input type="hidden" name="type_id" value="<%= board.type_id %>">
+
+    <div class="mb-3">
+      <label class="form-label">제목</label>
+      <input class="form-control" type="text" value="<%- board.title %>" style="width:300px;" disabled>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">작성자</label>
+      <input class="form-control" type="text" value="<%= board.name || board.loginid %>" style="width:300px;" disabled>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">작성일</label>
+      <input class="form-control" type="text" value="<%= board.date %>" style="width:300px;" disabled>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">내용</label>
+      <textarea class="form-control" style="width:800px;max-width:100%;height:180px;" disabled><%= board.content || '' %></textarea>
+    </div>
+
+    <div class="btn-area">
+      <% if(cls === 'MNG' && btname && btname[0] && btname[0].re_YN === 'Y' && Number(board.p_id) === 0 && !hasReply) { %>
+        <a href="/board/reply/<%= board.board_id %>/<%= pNum %>">
+          <button type="button" class="btn btn-info me-md-2">답변</button>
+        </a>
+      <% } %>
+
+      <a href="/board/view/<%= board.type_id %>/<%= pNum %>">
+        <button type="button" class="btn btn-info me-md-2">목록</button>
+      </a>
+      <% if(cls === 'MNG' || (cls === 'CST' && loginid === board.loginid)) { %>
+        <a href="/board/update/<%= board.board_id %>/<%= board.type_id %>/<%= pNum %>">
+          <button type="button" class="btn btn-info me-md-2">수정</button>
+        </a>
+        <a href="/board/delete/<%= board.board_id %>/<%= board.type_id %>/<%= pNum %>"
+           onclick="if(confirm('정말로 삭제하시겠습니까?')==false){return false}">
+          <button type="button" class="btn btn-info me-md-2">삭제</button>
+        </a>
+      <% } %>
+    </div>
+
+  <% } else if(mode === 'reply') { %>
+    <div class="mb-3">
+      <label class="form-label">제목</label>
+      <input class="form-control" type="text" value="<%- board.original_title %>" style="width:300px;" disabled>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">작성자</label>
+      <input class="form-control" type="text" value="<%= board.original_writer %>" style="width:300px;" disabled>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">작성일</label>
+      <input class="form-control" type="text" value="<%= board.original_date %>" style="width:300px;" disabled>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">내용</label>
+      <textarea class="form-control" style="width:800px;max-width:100%;height:180px;" disabled><%= board.original_content || '' %></textarea>
+    </div>
+
+    <form action="/board/reply_process" method="post">
+      <input type="hidden" name="type_id" value="<%= board.type_id %>">
+      <input type="hidden" name="p_id" value="<%= board.p_id %>">
+      <input type="hidden" name="pNum" value="<%= pNum || 1 %>">
+      <input type="hidden" name="title" value="<%- board.title %>">
+
+      <div class="mb-3">
+        <label class="form-label">답변</label>
+        <textarea class="form-control" name="content" style="width:800px;max-width:100%;height:120px;" required></textarea>
+      </div>
+
+      <div class="btn-area">
+        <button class="btn btn-info me-md-2" type="submit">작성</button>
+        <a href="/board/detail/<%= board.p_id %>/<%= pNum || 1 %>">
+          <button class="btn btn-info me-md-2" type="button">목록</button>
+        </a>
+      </div>
+    </form>
+
+  <% } else { %>
+    <form action="<%= mode === 'create' ? '/board/create_process' : '/board/update_process' %>" method="post">
+      <input type="hidden" name="type_id" value="<%= board.type_id %>">
+      <input type="hidden" name="board_id" value="<%= board.board_id || '' %>">
+      <input type="hidden" name="p_id" value="<%= board.p_id || 0 %>">
+      <input type="hidden" name="pNum" value="<%= pNum || 1 %>">
+      <input type="hidden" name="loginid" value="<%= board.loginid || loginid %>">
+
+      <div class="mb-3">
+        <label class="form-label">제목</label>
+        <input class="form-control" type="text" name="title" value="<%- board.title || '' %>" style="width:300px;" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">작성자</label>
+        <input class="form-control" type="text" value="<%= board.name || who %>" style="width:300px;" disabled>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">내용</label>
+        <textarea class="form-control" name="content" style="width:800px;max-width:100%;height:180px;"><%= board.content || '' %></textarea>
+      </div>
+
+      <% if(cls !== 'MNG') { %>
+      <div class="mb-3">
+        <label class="form-label">갱신삭제시 비밀번호</label>
+        <input class="form-control" type="password" name="password" style="width:300px;" <%= mode === 'create' ? 'required' : '' %>>
+      </div>
+      <% } else { %>
+        <input type="hidden" name="password" value="<%= board.password || '' %>">
+      <% } %>
+
+      <button class="btn btn-outline-primary btn-sm" type="submit"><%= mode === 'create' ? '생성' : '수정' %></button>
+      <a href="/board/view/<%= board.type_id %>/<%= pNum || 1 %>">
+        <button class="btn btn-outline-secondary btn-sm" type="button">목록</button>
+      </a>
+    </form>
+  <% } %>
+</div>
